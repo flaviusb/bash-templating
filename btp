@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Bash Templating Preprocessor: btp
+
+set -e
+
+usage() { cat <<HELP
+btp: Bash Template Preprocessor
+Usage:
+  btp filename
+      Processes file 'filename', outputs the result to stdout
+  btp, btp -h, btp --help
+      This usage information
+HELP
+exit 0;
+}
+
+if [ $# = 0 ]; then
+  usage
+fi
+
+case "$1" in
+  -h)
+    usage
+    ;;
+  --h)
+    usage
+    ;;
+esac
+
+mapfile -d ''  < <(grep -z -P -o --no-filename '(?ms)({{.*?}})|((?<!{{)([^{}]*+|(}(?!}))*+))' "$1")
+
+TEXT=
+
+for i in "${MAPFILE[@]}"
+do
+  TO_RUN=`echo "$i" | grep -P -o '(?s-m)^{{\K.*(?=}}$)' -`
+  if [ -n "$TO_RUN" ]
+  then
+    TEXT+=$(${TO_RUN})
+  else
+    TEXT+="${i}"
+  fi
+done;
+
+echo -n "${TEXT}"
