@@ -2,7 +2,7 @@
 
 # Bash Templating Preprocessor: btp
 
-set -e
+#set -e
 
 usage() { cat <<HELP
 btp: Bash Template Preprocessor
