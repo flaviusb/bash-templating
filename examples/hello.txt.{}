@@ -1,0 +1,2 @@
+Hello! This is running on {{uname -o}} version {{uname -r}} at {{date}} in {{pwd}}.
+
